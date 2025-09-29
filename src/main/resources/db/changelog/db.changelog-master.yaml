@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - preConditions:
+  - runningAs:
+    username: sangomalink_app
+
+#  - changeSet:
+#    id: 1
+#    author: your.name
+#    labels: example-label
+#    context: example-context
+#    comment: Creating the person table

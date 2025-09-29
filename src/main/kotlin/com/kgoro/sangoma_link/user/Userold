@@ -1,0 +1,230 @@
+package com.kgoro.sangoma_link.user
+
+import com.kgoro.sangoma_link.user.enums.ApprovalStatus
+import com.kgoro.sangoma_link.user.enums.DocumentType
+import com.kgoro.sangoma_link.user.enums.Enums
+import com.kgoro.sangoma_link.user.enums.UserEnum
+import com.kgoro.sangoma_link.user.enums.VerificationStatus
+import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
+import java.math.BigDecimal
+import java.nio.file.attribute.UserPrincipal
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.LocalDateTime
+import java.util.*
+import java.util.stream.Collectors
+import kotlin.properties.Delegates
+
+@Entity
+@Table(name = "users")
+data class User (
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    @Column(unique = true)
+    val email: String,
+    @Column(name = "password_hash")
+    val passwordHash: String,
+    @Column(name = "first_name")
+    val firstname: String,
+    @Column(name = "last_name")
+    val lastname: String,
+    @Column(name = "phone_number")
+    val phoneNumber: String,
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_type", length = 20)
+    val userType: UserEnum = UserEnum.Customer,
+    @Column(name = "profile_image_url")
+    val profileImageUrl: String,
+    @Column(name = "is_verified")
+    var isVerified: Boolean = false,
+    @Column(name = "is_active")
+    var isActive: Boolean = false,
+    @Column(name = "last_login_at")
+    val lastLoginAt: LocalDateTime,
+    @CreatedDate
+    @Column(name="created_at",nullable = false, updatable = false)
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    @LastModifiedDate
+    @Column(name="updated_at",insertable = false)
+    val updatedAt: LocalDateTime = LocalDateTime.now(),
+){
+
+    fun fullName(): String {
+        return this.firstname +" "+ this.lastname
+    }
+
+    private fun User.toUserResponse(): UserResponse {
+        return UserResponse(
+            id = this.id,
+            email = this.email,
+            firstname =this.firstname,
+            lastname = this.lastname,
+            fullname = this.fullName(),
+            phoneNumber = this.phoneNumber,
+            userType = this.userType,
+            profileImageUrl = this.profileImageUrl,
+            isVerified = this.isVerified,
+            isActive = this.isActive,
+            lastLoginAt = this.lastLoginAt,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt,
+        )
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, username='$email')"
+    }
+
+    companion object {
+        class BuildUser {
+            private var id by Delegates.notNull<Long>()
+            private lateinit var email: String
+            private lateinit var password: String
+            private lateinit var firstname: String
+            private lateinit var lastname: String
+            private lateinit var phoneNumber: String
+            private lateinit var userType: UserEnum
+            private lateinit var profileImageUrl: String
+            private var isVerified by Delegates.notNull<Boolean>()
+            private var isActive by Delegates.notNull<Boolean>()
+            private lateinit var lastLoginAt: LocalDateTime
+            private lateinit var createdAt: LocalDateTime
+            private lateinit var updatedAt: LocalDateTime
+
+
+            fun setId(id: Long)= apply { this.id = id }
+            fun setEmail(email: String) = apply { this.email = email }
+            fun setPassword(password: String) = apply { this.password = password }
+            fun setFirstname(firstname: String)= apply { this.firstname = firstname }
+            fun setLastname(lastname: String)= apply { this.lastname = lastname }
+            fun setPhoneNumber(phoneNumber: String)= apply { this.phoneNumber = phoneNumber }
+            fun setUserType(userType: UserEnum)= apply { this.userType = userType }
+            fun setProfileImageUrl(profileImageUrl: String)= apply { this.profileImageUrl = profileImageUrl }
+            fun setIsVerified(isVerified: Boolean) = apply { this.isVerified = isVerified }
+            fun setIsActive(isActive: Boolean) = apply { this.isActive = isActive }
+            fun setLastLoginAt(lastLoginAt: LocalDateTime) = apply { this.lastLoginAt = lastLoginAt }
+            fun setCreatedAt(createdAt: LocalDateTime) = apply { this.createdAt = createdAt }
+            fun setUpdatedAt(updatedAt: LocalDateTime) = apply { this.updatedAt = updatedAt }
+
+
+    //        fun setHistories(histories: List<WillTransactionHistory>) = apply { this.histories = histories }
+
+            fun build(): User {
+                return User(
+                    id = 0,
+                    email,
+                    password,
+                    firstname,
+                    lastname,
+                    phoneNumber,
+                    userType,
+                    profileImageUrl,
+                    isVerified,
+                    isActive,
+                    lastLoginAt,
+                    createdAt,
+                    updatedAt
+                )
+            }
+        }
+    }
+
+}
+
+
+
+/* SANGOMA-SPECIFIC TABLES */
+
+@Entity
+@Table(name = "sangoma_profiles")
+data class SangomaProfile(
+    @Id
+    val id: Long,
+    @Column(nullable = false, unique = true)
+    val userId: Long,
+    @Column(nullable = false)
+    val healingSpecialty: String,
+    val biography: String? = null,
+    @Column
+    val yearsOfExperience: Long? = null,
+    val traditionalLineage: String? = null,
+    val languagesSpoken: String? = null,
+    val consultationApproach: String? = null,
+    @Column(precision = 3, scale = 2)
+    val averageRating: BigDecimal = BigDecimal("0.00"),
+    val totalReviews: Long = 0,
+    val isFeatured: Boolean = false,
+    val acceptsNewClients: Boolean = true,
+    val profileApprovedAt: LocalDateTime? = null,
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    var approvalStatus: ApprovalStatus = ApprovalStatus.PENDING,
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    @Column(insertable = false)
+    val updatedAt: LocalDateTime = LocalDateTime.now()
+)
+
+@Entity
+@Table(name = "sangoma_verifications")
+data class SangomaVerification(
+    @Id
+    val id: Long,
+    @ManyToOne
+    @JoinColumn(name = "sangoma_id", nullable = false)
+    val sangoma: SangomaProfile, @Enumerated(EnumType.STRING)
+    @Column(length = 50)
+    var documentType: DocumentType,
+    @Column(nullable = false)
+    val documentUrl: String,
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    val verificationStatus: VerificationStatus = VerificationStatus.PENDING,
+    val verifiedBy: Long = 0,
+    val verifiedAt: LocalDateTime? = null,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val updatedAt: LocalDateTime = LocalDateTime.now()
+)
+
+@Entity
+@Table(
+    name = "sangoma_availabilities",
+    uniqueConstraLongs = [UniqueConstraLong(columnNames = ["sangoma_id", "day_of_week"])]
+)
+data class SangomaAvailability(
+    @Id
+    val id: Long,
+    @ManyToOne
+    @JoinColumn(name = "sangoma_id", nullable = false)
+    val sangoma: SangomaProfile,
+    @Column(length = 10)
+    val dayOfWeek: String,
+    @Column(nullable = false)
+    val startTime: LocalTime,
+    @Column(nullable = false)
+    val endTime: LocalTime,
+    val isAvailable: Boolean = true,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val updatedAt: LocalDateTime = LocalDateTime.now()
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
