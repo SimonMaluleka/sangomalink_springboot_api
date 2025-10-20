@@ -1,5 +1,6 @@
-import com.kgoro.sangoma_link.exception.CustomerNotFoundException
+
 import com.kgoro.sangoma_link.order.Order
+import com.kgoro.sangoma_link.product.ProductRepository
 import com.kgoro.sangoma_link.user.UserRepository
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service

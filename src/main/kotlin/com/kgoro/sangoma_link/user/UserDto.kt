@@ -3,6 +3,7 @@ package com.kgoro.sangoma_link.user
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.kgoro.sangoma_link.sangoma_profile.SangomaSpecificData
 import com.kgoro.sangoma_link.user.enums.ApprovalStatus
 import com.kgoro.sangoma_link.user.enums.UserType
 import jakarta.validation.constraints.NotBlank

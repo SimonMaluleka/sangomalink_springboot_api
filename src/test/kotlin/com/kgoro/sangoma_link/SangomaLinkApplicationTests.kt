@@ -9,5 +9,4 @@ class SangomaLinkApplicationTests {
 	@Test
 	fun contextLoads() {
 	}
-
 }

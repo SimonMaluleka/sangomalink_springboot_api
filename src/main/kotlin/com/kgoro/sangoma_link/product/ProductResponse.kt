@@ -2,12 +2,12 @@ package com.kgoro.sangoma_link.product
 import com.kgoro.sangoma_link.sangoma_profile.SangomaProfile
 import com.kgoro.sangoma_link.user.enums.WeightUnit
 import java.math.BigDecimal
-import java.util.*
+
 
 class ProductResponse (
-    val id: Long,
-    val sangoma: SangomaProfile,
-    val category: ProductCategory,
+    val id: Int,
+    val sangomaName: String,
+    val category: String,
     val name: String,
     val description: String?,
     val ingredients: String?,

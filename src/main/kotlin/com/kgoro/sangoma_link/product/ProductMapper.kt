@@ -1,5 +1,7 @@
-import com.kgoro.sangoma_link.product.Product
-import com.kgoro.sangoma_link.product.ProductResponse
+package com.kgoro.sangoma_link.product
+
+import com.kgoro.sangoma_link.user.enums.WeightUnit
+import org.apache.catalina.valves.rewrite.InternalRewriteMap
 import org.springframework.stereotype.Service
 
 @Service
@@ -31,8 +33,8 @@ class ProductMapper {
     fun toProductResponse(product: Product): ProductResponse {
         return ProductResponse(
             product.id,
-            product.sangoma,
-            product.category,
+            product.sangoma.user.firstName +" " + product.sangoma.user.lastName,
+            product.category.name,
             product.name,
             product.description,
             product.ingredients,

@@ -33,6 +33,7 @@ class SecurityConfig(
             .authorizeHttpRequests { req ->
                 req.requestMatchers(
                     "/auth/**",
+                    "/images/**",
                     "/error",
                     "/v2/api-docs",
                     "/v3/api-docs",

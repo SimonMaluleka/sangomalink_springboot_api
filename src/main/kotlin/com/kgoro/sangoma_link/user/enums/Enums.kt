@@ -60,7 +60,7 @@ enum class ServiceType {
 }
 
 enum class WeightUnit {
-    G, KG, ML, L
+    g, kg, ml, l
 }
 
 enum class VariationType {

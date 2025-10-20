@@ -4,7 +4,6 @@ import com.kgoro.sangoma_link.sangoma_profile.SangomaProfile
 import com.kgoro.sangoma_link.sangoma_profile.SangomaProfileRepository
 import com.kgoro.sangoma_link.user.enums.ApprovalStatus
 import com.kgoro.sangoma_link.user.enums.UserType
-import com.sangomalink.domain.*
 import jakarta.persistence.PostPersist
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -29,7 +28,7 @@ class UserEntityListener(
                 biography = null,
                 yearsOfExperience = 0,
                 traditionalLineage = null,
-                languages = listOf(),
+                languagesSpoken = listOf(),
                 consultationApproach = null,
                 isFeatured = false,
                 profileApprovedAt = null,

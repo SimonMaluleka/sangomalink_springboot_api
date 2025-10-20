@@ -7,6 +7,7 @@ import com.kgoro.sangoma_link.exception.EmailAlreadyExistsException
 import com.kgoro.sangoma_link.mail.EmailService
 import com.kgoro.sangoma_link.mail.EmailTemplate
 import com.kgoro.sangoma_link.sangoma_profile.SangomaProfileService
+import com.kgoro.sangoma_link.sangoma_profile.SangomaSpecificData
 import com.kgoro.sangoma_link.security.JwtService
 import com.kgoro.sangoma_link.security.TokenPair
 import com.kgoro.sangoma_link.user.*
@@ -15,6 +16,7 @@ import org.apache.tomcat.websocket.AuthenticationException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextImpl
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -135,12 +137,14 @@ class AuthenticationService(
 
     @Throws(AuthenticationException::class)
     fun authenticate(request: AuthenticateRequest): AuthenticationResponse {
-            authenticationManager.authenticate(
+            val authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
                     request.email,
                     request.password
                 )
             )
+
+            print("\n Authentication " + authentication +"\n")
             val claims = HashMap<String?, Any>()
 
             val user = userDetailsService.loadUserByUsername(request.email)

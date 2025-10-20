@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -99,9 +101,9 @@ class UserController(
 
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    fun getCurrentUser(@CurrentUser userPrincipal: UserPrincipal): ResponseEntity<ResponseWrapper<UserDto>> {
-        print("Current user $userPrincipal")
-        val user = userService.getUserById(userPrincipal.id)
+    fun getCurrentUser(@AuthenticationPrincipal userDetails: UserDetails): ResponseEntity<ResponseWrapper<UserDto>> {
+        print("Current user $userDetails")
+        val user = userService.getUserByEmail(userDetails.username)
 
         print("\n $user")
 

@@ -1,10 +1,10 @@
+package com.kgoro.sangoma_link.product
 
 import jakarta.validation.constraints.NotNull
-import java.util.*
 
 data class ProductPurchaseRequest (
     @NotNull(message="Product is mandatory")
-    val id: Long,
+    val id: Int,
     @NotNull(message="Product is mandatory")
     val quantity: Double
 )

@@ -1,23 +1,34 @@
-import com.kgoro.sangoma_link.product.ProductResponse
+package com.kgoro.sangoma_link.product
 import jakarta.validation.Valid
-import lombok.RequiredArgsConstructor
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.*
+
 
 @RestController
-@RequestMapping("product")
-@RequiredArgsConstructor
-class ProductController (val productService: ProductService){
+@RequestMapping("/products")
+class ProductController (
+    val productService: ProductService,
+){
+
     @GetMapping
     fun allProducts(): ResponseEntity<List<ProductResponse>> {
-        return ResponseEntity.ok(productService.allProducts)
+        print("\n get products controller method invoked")
+        val products = productService.allProducts()
+        print("\n Products: $products")
+        return ResponseEntity.ok(productService.allProducts())
     }
 
     @PostMapping
-    fun createProduct(@RequestBody @Valid request: ProductRequest): ResponseEntity<Long> {
+    fun createProduct(@RequestBody @Valid request: ProductRequest): ResponseEntity<Int> {
         return ResponseEntity.ok(productService.createProduct(request))
     }
+
+//    @GetMapping("/product/{productId}/image")
+//    fun getImageByProductId(@PathVariable productId: Int): ResponseEntity<List<Byte>> {
+//        val product = productService.getProductById(productId)
+//        val imageFile: List<Byte> = product.imageUrls[0]
+//        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(imageFile)
+//    }
 
 //    @PostMapping("/purchase")
 //    fun purchaseProducts(@RequestBody request: List<ProductPurchaseRequest>): ResponseEntity<List<ProductPurchaseResponse>> {
@@ -29,7 +40,7 @@ class ProductController (val productService: ProductService){
 //        return productService.productExistsById()
 //    }
     @GetMapping("/{product-id}")
-    fun getProductById(@PathVariable("product-id") productId: Long): ResponseEntity<ProductResponse> {
+    fun getProductById(@PathVariable("product-id") productId: Int): ResponseEntity<ProductResponse> {
         return ResponseEntity.ok(productService.getProductById(productId))
     }
 //

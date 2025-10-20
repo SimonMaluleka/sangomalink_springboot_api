@@ -48,6 +48,7 @@ class CurrentUserResolver : HandlerMethodArgumentResolver {
         binderFactory: WebDataBinderFactory?
     ): Any? {
         val authentication = SecurityContextHolder.getContext().authentication
+        print("Auth : $authentication")
         return authentication?.principal as? UserPrincipal
             ?: throw AccessDeniedException("User not authenticated")
     }

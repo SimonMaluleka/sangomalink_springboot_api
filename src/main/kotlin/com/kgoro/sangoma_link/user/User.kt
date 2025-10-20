@@ -32,7 +32,7 @@ data class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(nullable = false, unique = true, length = 100)
     val email: String,
 
     @Column(name = "password_hash", nullable = false, length = 255)
@@ -230,6 +230,16 @@ data class User(
                 profileImageUrl = profileImageUrl,
                 isVerified = false,
                 isActive = true
+            )
+        }
+
+        fun toPublicUserDto(user: User): PublicUserDto{
+            return PublicUserDto(
+                id = user.id!!,
+                firstName = user.firstName,
+                lastName = user.lastName,
+                profileImageUrl = user.profileImageUrl,
+                userType = user.userType
             )
         }
     }

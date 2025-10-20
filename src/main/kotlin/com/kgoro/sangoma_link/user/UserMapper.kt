@@ -56,7 +56,7 @@ fun SangomaProfile.toDto(): SangomaProfileDto {
         biography = this.biography,
         yearsOfExperience = this.yearsOfExperience,
         traditionalLineage = this.traditionalLineage,
-        languages = this.languages,
+        languages = this.languagesSpoken,
         consultationApproach = this.consultationApproach,
         averageRating = this.averageRating,
         totalReviews = this.totalReviews,

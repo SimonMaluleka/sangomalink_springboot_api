@@ -14,6 +14,8 @@ class AddressController (
     @GetMapping
     fun getAllAddresses(): ResponseEntity<List<Address>> = addressService.getAllAddresses()
 
-//    @PostMapping
-//    fun addNewAddress(): Boolean = addressService.addNewAddress(address: AddressRequest)
+    @PostMapping("/address/create")
+    fun addNewAddress(addressRequest: AddressRequest): Address = addressService.addNewAddress(
+        addressRequest
+    )
 }

@@ -1,13 +1,14 @@
 
+package com.kgoro.sangoma_link.product
 
-import com.kgoro.sangoma_link.product.ProductCategory
+
 import com.kgoro.sangoma_link.sangoma_profile.SangomaProfile
 
 import com.kgoro.sangoma_link.user.enums.WeightUnit
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import java.math.BigDecimal
-import java.util.UUID
+
 
 class ProductRequest (
     val sangoma: SangomaProfile,

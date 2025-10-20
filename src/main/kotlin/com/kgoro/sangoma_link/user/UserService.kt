@@ -3,6 +3,7 @@ package com.kgoro.sangoma_link.user
 import com.kgoro.sangoma_link.exception.EmailAlreadyExistsException
 import com.kgoro.sangoma_link.exception.UserNotFoundException
 import com.kgoro.sangoma_link.sangoma_profile.SangomaProfileService
+import com.kgoro.sangoma_link.sangoma_profile.SangomaSpecificData
 import com.kgoro.sangoma_link.user.enums.UserType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -172,10 +173,3 @@ class UserService(
     }
 }
 
-data class SangomaSpecificData(
-    val healingSpecialty: String,
-    val yearsOfExperience: Long,
-    val traditionalLineage: String? = null,
-    val languagesSpoken: String? = null,
-    val biography: String? = null
-)

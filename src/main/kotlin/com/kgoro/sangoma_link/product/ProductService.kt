@@ -1,4 +1,5 @@
-import com.kgoro.sangoma_link.product.ProductResponse
+package com.kgoro.sangoma_link.product
+
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.util.*
@@ -9,13 +10,14 @@ class ProductService(
     val productRepository: ProductRepository,
     val mapper: ProductMapper
 ) {
-    val allProducts: List<ProductResponse>
-        get() = productRepository.findAll()
+    fun allProducts(): List<ProductResponse> {
+        return productRepository.findAll()
             .stream()
             .map(mapper::toProductResponse)
             .collect(Collectors.toList())
+    }
 
-    fun createProduct(request: ProductRequest): Long {
+    fun createProduct(request: ProductRequest): Int {
         val product = mapper.toProduct(request)
         return productRepository.save(product).id
     }
@@ -55,7 +57,7 @@ class ProductService(
         return purchasedProducts
     }
 
-    fun getProductById(productId: Long): ProductResponse {
+    fun getProductById(productId: Int): ProductResponse {
         val product = productRepository.findProductById(productId)
         return product
             .map(mapper::toProductResponse)

@@ -12,7 +12,7 @@ import kotlin.properties.Delegates
 @Entity
 @Table(name = "products")
 data class Product(
-    @Id val id: Long,
+    @Id val id: Int,
     @ManyToOne @JoinColumn(name = "sangoma_id", nullable = false)
     val sangoma: SangomaProfile,
     @ManyToOne @JoinColumn(name = "category_id")

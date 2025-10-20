@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 data class Address (
     @Id
     @GeneratedValue
-    val id: Long,
+    val id: Int,
     @Column(name = "user_id", nullable = false)
     val userId: Long,
     val addressLine1: String,
@@ -28,7 +28,9 @@ data class Address (
     val latitude: Double,
     val longitude: Double,
     val isPrimary: Boolean,
+    val isDefault: Boolean,
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val updatedAt: LocalDateTime = LocalDateTime.now(),
 )
