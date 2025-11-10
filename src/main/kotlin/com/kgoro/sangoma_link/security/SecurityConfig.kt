@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 class SecurityConfig(
+    val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint,
     val jwtAuthFilter: JwtAuthFilter,
     val authenticationProvider: AuthenticationProvider
     ) {
@@ -26,10 +27,10 @@ class SecurityConfig(
     @Bean
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain {
-        print("filterchain invoked")
         http
             .cors(Customizer.withDefaults<CorsConfigurer<HttpSecurity>>())
             .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
+            .exceptionHandling { it.authenticationEntryPoint(jwtAuthenticationEntryPoint) }
             .authorizeHttpRequests { req ->
                 req.requestMatchers(
                     "/auth/**",

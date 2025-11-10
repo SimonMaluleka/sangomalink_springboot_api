@@ -28,6 +28,7 @@ enum class DocumentType {
 enum class BookingStatus {
     PENDING,
     CONFIRMED,
+    DECLINED,
     COMPLETED,
     CANCELLED,
     NO_SHOW

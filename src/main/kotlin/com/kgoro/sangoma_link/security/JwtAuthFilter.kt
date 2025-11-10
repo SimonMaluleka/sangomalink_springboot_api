@@ -1,6 +1,7 @@
 package com.kgoro.sangoma_link.security
 
 import com.kgoro.sangoma_link.user.CustomUserDetailsService
+import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -26,7 +27,6 @@ class JwtAuthFilter(
     ) {
         val authHeader: String? = request.getHeader(HttpHeaders.AUTHORIZATION)
 
-
         if (request.servletPath.contains("/api/v1/auth")){
             filterChain.doFilter(request, response)
             return
@@ -39,18 +39,25 @@ class JwtAuthFilter(
 
         val jwtToken: String = authHeader!!.substringAfter("Bearer ")
 
-        val userEmail = jwtService.extractEmail(jwtToken)
+        try {
+             val userEmail = jwtService.extractEmail(jwtToken)
+             if(userEmail != null && SecurityContextHolder.getContext().authentication == null){
+                 val foundUser = userDetailsService.loadUserByUsername(userEmail)
 
-
-
-        if(userEmail != null && SecurityContextHolder.getContext().authentication == null){
-            val foundUser = userDetailsService.loadUserByUsername(userEmail)
-
-            if (jwtService.isTokenValid(jwtToken, foundUser)){
-                updateSecurityContext(foundUser, request)
-            }
-            filterChain.doFilter(request,response)
+                 if (jwtService.isTokenValid(jwtToken, foundUser)){
+                     updateSecurityContext(foundUser, request)
+                 }
+                 filterChain.doFilter(request,response)
+             }
+        } catch (e: ExpiredJwtException) {
+            request.setAttribute("expired", e)
+        } catch (e: Exception) {
+            // Catch other JWT exceptions
+            request.setAttribute("invalid", e)
         }
+
+
+
     }
 
     private fun updateSecurityContext(

@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import kotlin.properties.Delegates
 
 @Entity
-@Table(name = "sangoma_services")
+@Table(name = "services")
 data class SangomaService(
     @Id
     val id: Long,

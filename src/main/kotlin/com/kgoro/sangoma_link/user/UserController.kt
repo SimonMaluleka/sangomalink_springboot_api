@@ -20,9 +20,6 @@ class UserController(
     private val userMapper: UserMapper,
     private val jwtService: JwtService
 ) {
-
-    // === PUBLIC ENDPOLongS ===
-
     @PostMapping("/register")
     fun registerUser(@Valid @RequestBody request: CreateUserRequest): ResponseEntity<ResponseWrapper<AuthResponseDto>> {
         val user = userService.createUser(
@@ -36,7 +33,11 @@ class UserController(
             sangomaSpecificData = request.toSangomaSpecificData()
         )
 
-        //val token = jwtService.generateToken(user, )
+//        val token = jwtService.generateToken(
+//            user,
+//
+//            )
+
         val authResponse = AuthResponseDto(
             user = userMapper.toDto(user),
             accessToken = "generated_jwt_token_here",

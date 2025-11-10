@@ -1,22 +1,17 @@
 package com.kgoro.sangoma_link.address
 
-import com.kgoro.sangoma_link.user.User
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
+import org.locationtech.jts.geom.Point
 import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
+
 
 @Entity
 @Table(name = "user_addresses")
 data class Address (
     @Id
-    @GeneratedValue
-    val id: Int,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
     @Column(name = "user_id", nullable = false)
     val userId: Long,
     val addressLine1: String,
@@ -25,8 +20,8 @@ data class Address (
     val province: String,
     val postalCode: String,
     val country: String,
-    val latitude: Double,
-    val longitude: Double,
+    @Column(columnDefinition = "geography(Point, 4326)")
+    var location: Point,
     val isPrimary: Boolean,
     val isDefault: Boolean,
     @CreatedDate

@@ -12,6 +12,7 @@ class CustomUserDetailsService(
     private val userRepository: UserRepository
 ) : UserDetailsService {
     override fun loadUserByUsername(username: String): UserDetails {
+        print("\n Username: $username")
         val foundUser = userRepository.findByEmail(username)
 
             return foundUser?.mapToUserDetails()

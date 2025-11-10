@@ -32,7 +32,7 @@ class AuthenticationController(
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun createUser(@RequestBody @Valid request: CreateUserRequest): ResponseEntity<Any>{
+    fun createUser(@RequestBody @Valid request: CreateUserRequest): ResponseEntity<AuthenticationResponse>{
         authenticationService.createUser(
             email = request.email,
             password = request.passwordHash,
@@ -43,6 +43,8 @@ class AuthenticationController(
             profileImageUrl = request.profileImageUrl,
             sangomaSpecificData = request.toSangomaSpecificData()
         )
+
+
         return ResponseEntity.accepted().build()
     }
 

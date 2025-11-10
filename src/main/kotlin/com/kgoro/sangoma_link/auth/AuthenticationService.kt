@@ -50,7 +50,7 @@ class AuthenticationService(
         phoneNumber: String? = null,
         profileImageUrl: String? = null,
         sangomaSpecificData: SangomaSpecificData? = null
-    ): User {
+    ): AuthenticationResponse {
         // Validate email uniqueness
         if (userRepository.existsByEmail(email)) {
             throw EmailAlreadyExistsException("Email already registered: $email")
@@ -94,7 +94,30 @@ class AuthenticationService(
             sangomaProfileService.createSangomaProfile(savedUser, sangomaSpecificData)
         }
 
-        return savedUser
+        val claims = HashMap<String?, Any>()
+        val userDetails = userDetailsService.loadUserByUsername(savedUser.email)
+        claims["fullName"] = userDetails.username
+        claims["roles"] = userDetails.authorities
+        val accessToken = generateAccessToken(userDetails, claims)
+
+        val refreshAccessToken = generateRefreshToken(userDetails)
+
+        val newAccessToken = AccessToken(
+            0,
+            accessToken,
+            refreshAccessToken,
+            userDetails,
+            false
+        )
+
+        accessTokenRepository.save(newAccessToken)
+
+        return AuthenticationResponse(
+            token = accessToken,
+            refreshJwtToken = refreshAccessToken
+        )
+
+       // return savedUser
     }
 
     private fun sendValidationEmail(user: User) {
