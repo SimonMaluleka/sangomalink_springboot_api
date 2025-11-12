@@ -1,15 +1,15 @@
 package com.kgoro.sangoma_link.auth
 //import io.swagger.v3.oas.annotations.tags.Tag
+
 import com.kgoro.sangoma_link.security.JwtTokenResponse
 import com.kgoro.sangoma_link.security.TokenPair
 import com.kgoro.sangoma_link.user.CreateUserRequest
 import com.kgoro.sangoma_link.user.CustomUserDetailsService
-import com.kgoro.sangoma_link.user.toSangomaSpecificData
+import com.kgoro.sangoma_link.user.User
+import com.kgoro.sangoma_link.user.enums.UserType
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
@@ -33,6 +33,7 @@ class AuthenticationController(
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun createUser(@RequestBody @Valid request: CreateUserRequest): ResponseEntity<AuthenticationResponse>{
+        print(UserType.Sangoma == request.userType)
         authenticationService.createUser(
             email = request.email,
             password = request.passwordHash,

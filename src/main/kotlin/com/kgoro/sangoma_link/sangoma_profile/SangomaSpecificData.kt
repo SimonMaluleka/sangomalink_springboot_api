@@ -5,6 +5,6 @@ data class SangomaSpecificData(
     val biography: String? = null,
     val yearsOfExperience: Long,
     val traditionalLineage: String? = null,
-    val languagesSpoken: String? = null,
+    val languagesSpoken: List<String>? = null,
 
 )

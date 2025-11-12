@@ -51,6 +51,7 @@ class AuthenticationService(
         profileImageUrl: String? = null,
         sangomaSpecificData: SangomaSpecificData? = null
     ): AuthenticationResponse {
+        print("\n Sangoma details: "+sangomaSpecificData?.healingSpecialty)
         // Validate email uniqueness
         if (userRepository.existsByEmail(email)) {
             throw EmailAlreadyExistsException("Email already registered: $email")
@@ -91,6 +92,7 @@ class AuthenticationService(
 
         // Create sangoma profile if user type is sangoma
         if (userType == UserType.Sangoma && sangomaSpecificData != null) {
+            print("\ncreating sangoma profile\n")
             sangomaProfileService.createSangomaProfile(savedUser, sangomaSpecificData)
         }
 

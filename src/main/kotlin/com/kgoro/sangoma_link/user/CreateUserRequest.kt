@@ -2,6 +2,7 @@ package com.kgoro.sangoma_link.user
 
 import jakarta.validation.constraints.*
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.kgoro.sangoma_link.sangoma_profile.SangomaSpecificData
 import com.kgoro.sangoma_link.user.enums.UserType
 
 
@@ -60,7 +61,7 @@ data class CreateUserRequest(
 
     @field:Size(max = 500, message = "Languages spoken cannot exceed 500 characters")
     @field:JsonProperty("languagesSpoken")
-    val languagesSpoken: String? = null,
+    val languagesSpoken: List<String>? = null,
 
 
 ) {
@@ -88,6 +89,21 @@ data class CreateUserRequest(
         healingSpecialty = healingSpecialty?.trim(),
         biography = biography?.trim(),
         traditionalLineage = traditionalLineage?.trim(),
-        languagesSpoken = languagesSpoken?.trim(),
+        languagesSpoken = languagesSpoken  //?.trim(),
     )
+
+    fun toSangomaSpecificData(): SangomaSpecificData? {
+        return if (this.userType == UserType.Sangoma) {
+            SangomaSpecificData(
+                healingSpecialty = this.healingSpecialty ?: "",
+                yearsOfExperience = this.yearsOfExperience ?: 0,
+                traditionalLineage = this.traditionalLineage,
+                languagesSpoken = this.languagesSpoken,
+                biography = this.biography ?: "" // Can be updated later
+            )
+        } else {
+            null
+        }
+    }
+
 }
