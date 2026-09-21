@@ -40,7 +40,7 @@ class Profile(
     val isFeatured: Boolean,
 
     // Maps the PostgreSQL character varying(255)[] array type
-    @Convert(converter = StringListConverter::class)
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.ARRAY)
     @Column(name = "languages_spoken", columnDefinition = "text[]")
     val languagesSpoken: List<String>?,
 

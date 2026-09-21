@@ -15,22 +15,6 @@ class BookingController(
     val bookingService: BookingService,
     val userService: UserService
 ) {
-//    @GetMapping
-//    @PreAuthorize("isAuthenticated()")
-//    fun getAllBookings(@AuthenticationPrincipal userDetails: UserDetails): ResponseEntity<List<BookingResponse>> {
-//        val user = userService.getUserByEmail(userDetails.username)
-//
-//        val bookings = bookingService.getAllBookings(user.id!!)
-//
-//        return ResponseEntity.ok(bookings)
-//    }
-//
-//    @PostMapping
-//    fun createBooking(@RequestBody request: BookingRequest) {
-//        print("create booking endpoint")
-//        val response = bookingService.createBooking(request)
-//        print("\n $response")
-//    }
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
@@ -42,8 +26,6 @@ class BookingController(
         return ResponseEntity.ok(bookings)
     }
 
-//    @GetMapping("/{bookingId}")
-//    fun findById(@PathVariable bookingId: Long) = bookingService.findById(bookingId)
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/{bookingId}/cancel")
@@ -78,19 +60,4 @@ class BookingController(
         print(e.message)
     }
 
-//    @PutMapping("/{bookingId}/decline")
-//    fun declineBooking(@PathVariable bookingId: Long , sangomaId: Long): BookingResult = try {
-//        print("accepting booking...")
-//        val updated  = bookingService.declineBookingById(
-//            bookingId,
-//            sangomaId
-//        ) as BookingResult
-//    } catch (e: Exception){
-//        print(e.message)
-//    }
-//    @PutMapping("/bookingId")
-//    fun updateBooking(@PathVariable("bookingId") bookingId: Int, @RequestBody booking: BookingRequest) = bookingService.updateBookingById(
-//        booking = booking,
-//        id = bookingId
-//    )
 }
