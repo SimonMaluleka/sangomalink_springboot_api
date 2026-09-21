@@ -9,10 +9,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
@@ -43,7 +41,7 @@ class JwtAuthFilter(
              val userEmail = jwtService.extractEmail(jwtToken)
              if(userEmail != null && SecurityContextHolder.getContext().authentication == null){
                  val foundUser = userDetailsService.loadUserByUsername(userEmail)
-
+                 print(jwtService.isTokenValid(jwtToken, foundUser))
                  if (jwtService.isTokenValid(jwtToken, foundUser)){
                      updateSecurityContext(foundUser, request)
                  }

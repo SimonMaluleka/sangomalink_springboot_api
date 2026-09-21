@@ -1,13 +1,14 @@
 package com.kgoro.sangoma_link.user
 
-import com.kgoro.sangoma_link.address.Address
-import com.kgoro.sangoma_link.booking.Booking
-import com.kgoro.sangoma_link.cart.Cart
-import com.kgoro.sangoma_link.notification.Notification
-import com.kgoro.sangoma_link.order.Order
-import com.kgoro.sangoma_link.product.ProductReview
-import com.kgoro.sangoma_link.review.Review
-import com.kgoro.sangoma_link.sangoma_profile.SangomaProfile
+import com.kgoro.sangoma_link.common.address.Address
+import com.kgoro.sangoma_link.user.booking.Booking
+import com.kgoro.sangoma_link.market.cart.Cart
+import com.kgoro.sangoma_link.common.notification.Notification
+import com.kgoro.sangoma_link.market.order.Order
+import com.kgoro.sangoma_link.market.product.ProductReview
+import com.kgoro.sangoma_link.common.review.Review
+import com.kgoro.sangoma_link.sangoma.profile.Profile
+import com.kgoro.sangoma_link.storage.MediaMetadata
 import com.kgoro.sangoma_link.support_ticket.SupportTicket
 import com.kgoro.sangoma_link.user.enums.UserType
 import jakarta.persistence.*
@@ -72,8 +73,10 @@ data class User(
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 
     // Relationships
+    @OneToOne(mappedBy = "ownedBy", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    var userMedia: MediaMetadata? = null,
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    var sangomaProfile: SangomaProfile? = null,
+    var profile: Profile? = null,
     @Transient
     val addresses: List<Address> = emptyList(),
     @Transient
@@ -238,6 +241,8 @@ data class User(
                 id = user.id!!,
                 firstName = user.firstName,
                 lastName = user.lastName,
+                email = user.email,
+                phoneNumber = user.phoneNumber!!,
                 profileImageUrl = user.profileImageUrl,
                 userType = user.userType
             )

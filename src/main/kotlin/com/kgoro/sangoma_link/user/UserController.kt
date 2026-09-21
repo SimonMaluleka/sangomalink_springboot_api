@@ -30,7 +30,7 @@ class UserController(
             userType = request.userType,
             phoneNumber = request.phoneNumber,
             profileImageUrl = request.profileImageUrl,
-            sangomaSpecificData = request.toSangomaSpecificData()
+            specificData = request.toSangomaSpecificData()
         )
 
 //        val token = jwtService.generateToken(
@@ -103,7 +103,7 @@ class UserController(
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     fun getCurrentUser(@AuthenticationPrincipal userDetails: UserDetails): ResponseEntity<ResponseWrapper<UserDto>> {
-        print("Current user $userDetails")
+        print("\n Current user $userDetails")
         val user = userService.getUserByEmail(userDetails.username)
 
         print("\n $user")

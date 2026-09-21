@@ -2,11 +2,9 @@ package com.kgoro.sangoma_link.user
 
 import com.kgoro.sangoma_link.exception.EmailAlreadyExistsException
 import com.kgoro.sangoma_link.exception.UserNotFoundException
-import com.kgoro.sangoma_link.sangoma_profile.SangomaProfileService
-import com.kgoro.sangoma_link.sangoma_profile.SangomaSpecificData
+import com.kgoro.sangoma_link.sangoma.profile.ProfileService
+import com.kgoro.sangoma_link.sangoma.profile.SpecificData
 import com.kgoro.sangoma_link.user.enums.UserType
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -17,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val sangomaProfileService: SangomaProfileService
+    private val profileService: ProfileService
 ) {
 
     fun createUser(
@@ -28,7 +26,7 @@ class UserService(
         userType: UserType,
         phoneNumber: String? = null,
         profileImageUrl: String? = null,
-        sangomaSpecificData: SangomaSpecificData? = null
+        specificData: SpecificData? = null
     ): User {
         // Validate email uniqueness
         if (userRepository.existsByEmail(email)) {
@@ -69,8 +67,8 @@ class UserService(
         val savedUser = userRepository.save(user)
 
         // Create sangoma profile if user type is sangoma
-        if (userType == UserType.Sangoma && sangomaSpecificData != null) {
-            sangomaProfileService.createSangomaProfile(savedUser, sangomaSpecificData)
+        if (userType == UserType.Sangoma && specificData != null) {
+            profileService.createSangomaProfile(savedUser, specificData)
         }
 
         return savedUser
@@ -170,6 +168,10 @@ class UserService(
 
     fun getRegistrationTrends(period: String) {
         TODO("Not yet implemented")
+    }
+
+    fun saveUserProfileImageMetadata(finalFilename: String, userId: Long) {
+        userRepository.saveUserProfileImageMetadata(finalFilename, userId)
     }
 }
 

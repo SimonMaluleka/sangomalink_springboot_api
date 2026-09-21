@@ -1,6 +1,6 @@
 package com.kgoro.sangoma_link.user
 
-import com.kgoro.sangoma_link.sangoma_profile.SangomaProfile
+import com.kgoro.sangoma_link.sangoma.profile.Profile
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,7 +19,7 @@ class UserMapper {
             isActive = user.isActive,
             createdAt = user.createdAt,
             updatedAt = user.updatedAt,
-            sangomaProfile = user.sangomaProfile?.toDto()
+            sangomaProfile = user.profile?.toDto()
         )
     }
 
@@ -28,6 +28,8 @@ class UserMapper {
             id = user.id!!,
             firstName = user.firstName,
             lastName = user.lastName,
+            email = user.email,
+            phoneNumber = user.phoneNumber!!,
             profileImageUrl = user.profileImageUrl,
             userType = user.userType
         )
@@ -49,7 +51,7 @@ class UserMapper {
 }
 
 // Extension function for SangomaProfile
-fun SangomaProfile.toDto(): SangomaProfileDto {
+fun Profile.toDto(): SangomaProfileDto {
     return SangomaProfileDto(
         id = this.id,
         healingSpecialty = this.healingSpecialty,

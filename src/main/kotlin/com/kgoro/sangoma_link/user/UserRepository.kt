@@ -1,8 +1,6 @@
 package com.kgoro.sangoma_link.user
 
 import com.kgoro.sangoma_link.user.enums.UserType
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -49,4 +47,11 @@ interface UserRepository: JpaRepository<User, Long> {
 //    fun findApprovedSangomas(): List<User>
 
     fun findByIdAndIsActiveTrue(id: Long): Optional<User>
+
+    @Query("""
+        UPDATE users u 
+        SET u.profile_image_url = :finalFilename 
+        WHERE u.id = :userId
+        """, nativeQuery = true)
+    fun saveUserProfileImageMetadata(@Param("finalFilename") finalFilename: String, @Param("userId")  userId: Long)
 }

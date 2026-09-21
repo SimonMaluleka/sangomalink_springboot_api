@@ -1,0 +1,66 @@
+package com.kgoro.sangoma_link.sangoma.availability
+
+import com.kgoro.sangoma_link.sangoma.profile.ProfileRepository
+import com.sangoma.dto.AvailabilityRequest
+import com.sangoma.dto.AvailabilityResponse
+import java.time.DayOfWeek
+import java.time.LocalTime
+
+class WeeklyAvailability(
+    val profileRepository: ProfileRepository,
+    val availabilityRepository: AvailabilityRepository
+){
+    fun setWeeklyAvailability(healerId: Long, requests: List<AvailabilityRequest>): List<AvailabilityResponse> {
+        val healer = profileRepository.findById(healerId)
+            .orElseThrow { IllegalArgumentException("Healer not found with id: $healerId") }
+
+        // Clear existing availabilities
+        val existing = availabilityRepository.findBySangomaId(healerId)
+        availabilityRepository.deleteAll(existing)
+
+        // Save new availabilities
+        val availabilities = requests.map { request ->
+            Availability(
+                healer = healer,
+                dayOfWeek = DayOfWeek.valueOf(request.dayOfWeek.uppercase()),
+                startTime = LocalTime.parse(request.startTime),
+                endTime = LocalTime.parse(request.endTime),
+                slotDuration = request.slotDuration,
+                breakStartTime = request.breakStartTime?.let { LocalTime.parse(it) },
+                breakEndTime = request.breakEndTime?.let { LocalTime.parse(it) }
+            )
+        }
+
+        val saved = availabilityRepository.saveAll(availabilities)
+        return saved.map { it.toResponse() }
+    }
+
+    fun getWeeklyAvailability(healerId: Long): List<AvailabilityResponse> {
+        val healer = profileRepository.findById(healerId)
+            .orElseThrow { IllegalArgumentException("Healer not found with id: $healerId") }
+
+        val availabilities = availabilityRepository.findAllByHealerOrderByDayOfWeek(healer)
+        return availabilities.map { it.toResponse() }
+    }
+
+    fun getAvailabilityForDay(healerId: Long, dayOfWeek: String): AvailabilityResponse? {
+        val healer = profileRepository.findById(healerId)
+            .orElseThrow { IllegalArgumentException("Healer not found with id: $healerId") }
+
+        val day = DayOfWeek.valueOf(dayOfWeek.uppercase())
+        val availability = availabilityRepository.findBySangomaIdAndDayOfWeek(healerId, day)
+        return availability?.toResponse()
+    }
+
+    private fun Availability.toResponse(): AvailabilityResponse {
+        return AvailabilityResponse(
+            id = this.id,
+            dayOfWeek = this.dayOfWeek.toString(),
+            startTime = this.startTime.toString(),
+            endTime = this.endTime.toString(),
+            slotDuration = this.slotDuration,
+            breakStartTime = this.breakStartTime?.toString(),
+            breakEndTime = this.breakEndTime?.toString()
+        )
+    }
+}

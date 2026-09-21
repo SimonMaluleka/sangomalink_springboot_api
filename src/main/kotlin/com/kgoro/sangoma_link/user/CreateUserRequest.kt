@@ -2,7 +2,7 @@ package com.kgoro.sangoma_link.user
 
 import jakarta.validation.constraints.*
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.kgoro.sangoma_link.sangoma_profile.SangomaSpecificData
+import com.kgoro.sangoma_link.sangoma.profile.SpecificData
 import com.kgoro.sangoma_link.user.enums.UserType
 
 
@@ -92,9 +92,9 @@ data class CreateUserRequest(
         languagesSpoken = languagesSpoken  //?.trim(),
     )
 
-    fun toSangomaSpecificData(): SangomaSpecificData? {
+    fun toSangomaSpecificData(): SpecificData? {
         return if (this.userType == UserType.Sangoma) {
-            SangomaSpecificData(
+            SpecificData(
                 healingSpecialty = this.healingSpecialty ?: "",
                 yearsOfExperience = this.yearsOfExperience ?: 0,
                 traditionalLineage = this.traditionalLineage,

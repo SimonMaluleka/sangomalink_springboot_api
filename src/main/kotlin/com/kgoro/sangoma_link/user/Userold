@@ -1,10 +1,10 @@
 package com.kgoro.sangoma_link.user
 
-import com.kgoro.sangoma_link.user.enums.ApprovalStatus
-import com.kgoro.sangoma_link.user.enums.DocumentType
+import enums.com.kgoro.sangoma_link.security.user.ApprovalStatus
+import enums.com.kgoro.sangoma_link.security.user.DocumentType
 import com.kgoro.sangoma_link.user.enums.Enums
 import com.kgoro.sangoma_link.user.enums.UserEnum
-import com.kgoro.sangoma_link.user.enums.VerificationStatus
+import enums.com.kgoro.sangoma_link.security.user.VerificationStatus
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate

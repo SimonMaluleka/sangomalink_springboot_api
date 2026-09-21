@@ -1,11 +1,13 @@
 package com.kgoro.sangoma_link.user
 
+import java.time.LocalDateTime
+
 data class ResponseWrapper<T>(
     val success: Boolean,
     val data: T? = null,
     val message: String? = null,
     val errors: List<ErrorDetail>? = null,
-    val timestamp: String = java.time.LocalDateTime.now().toString(),
+    val timestamp: String = LocalDateTime.now().toString(),
     val path: String? = null
 ) {
     companion object {

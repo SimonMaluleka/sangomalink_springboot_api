@@ -1,0 +1,36 @@
+package com.kgoro.sangoma_link.sangoma.schedule
+
+import jakarta.persistence.*
+import java.time.LocalDate
+import java.time.LocalTime
+
+@Entity
+@Table(name = "schedule_slots")
+data class ScheduleSlot(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "healer_id", nullable = false)
+    val healer: Healer? = null,
+
+    @Column(nullable = false)
+    val slotDate: LocalDate = LocalDate.now(),
+
+    @Column(nullable = false)
+    val startTime: LocalTime = LocalTime.of(9, 0),
+
+    @Column(nullable = false)
+    val endTime: LocalTime = LocalTime.of(10, 0),
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    val status: SlotStatus = SlotStatus.AVAILABLE
+)
+
+enum class SlotStatus {
+    AVAILABLE,
+    BOOKED,
+    BLOCKED
+}

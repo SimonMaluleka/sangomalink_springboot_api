@@ -43,6 +43,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+//    implementation("com.vladmihalcea:hibernate-types-52:2.20.0")
 //	implementation("org.liquibase:liquibase-core")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
